@@ -3,10 +3,9 @@ An introduction to finite volume solvers
 
 Numerical experiments using finite volume solvers to investigate the 1-D Elastic Wave Equations  
 
-$$
-\frac{\partial}{\partial t}\sigma - \mu \frac{\partial}{\partial x} v = 0 \\
-    \ \frac{\partial}{\partial t}v - \frac{1}{\rho} \frac{\partial}{\partial x} \sigma = 0
-$$
+ <img src="https://latex.codecogs.com/svg.latex?\frac{\partial}{\partial&space;t}\sigma&space;-&space;\mu&space;\frac{\partial}{\partial&space;x}&space;v&space;=&space;0&space;" alt="Paris" class="center">
+
+ <img src="https://latex.codecogs.com/gif.latex?\frac{\partial}{\partial&space;t}v&space;-&space;\frac{1}{\rho}&space;\frac{\partial}{\partial&space;x}&space;\sigma&space;=&space;0" alt="Paris" class="center">
 
 Repository Structure:
 ```
