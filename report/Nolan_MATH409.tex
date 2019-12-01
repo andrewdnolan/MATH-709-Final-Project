@@ -75,7 +75,7 @@
 % supplement. See the xr-hyperref package for details.
 
 %% Use \myexternaldocument on Overleaf
-\myexternaldocument{ex_supplement}
+%\myexternaldocument{ex_supplement}
 
 \begin{document}
 
@@ -83,7 +83,7 @@
 
 % REQUIRED
 \begin{abstract}
-    An introductory description of finite volume methods for solving partial differential equations is discussed below. Conservation laws, the finite volume method, and the Riemann problem are all investigated via the one dimensional elastic wave equation. We use the method of characteristic to reduce this couple set of equations the advection equation for which we can implement the finite volume methods.
+    An introductory description of finite volume methods for solving partial differential equations is discussed below. Conservation laws, the finite volume method, and the Riemann problem are all investigated via the one-dimensional elastic wave equation. We use the method of characteristic to reduce this couple set of equations too the advection equation which we the solve numerically via finite volume methods.
 \end{abstract}
 
 % REQUIRED
@@ -97,17 +97,20 @@
 % \end{AMS}
 
 \section{Introduction} 
-Numerical methods for solving partial differential equations (PDEs) arise across all scientific fields. From modeling future predictions of global sea-level rise to modeling heat flow through a rod, numerical solution to PDEs at the heart of modelling physical phenomena. The finite difference method, which approximates derivatives using the Taylor expansion, is a common starting point for numerical solutions to PDEs. By using the the Taylor expansion ordinary differential equations or partial PDEs can be reduced to a series of algebraic statements for which matrix methods can be used to solve efficiently.  
+Numerical methods for solving partial differential equations (PDEs) arise across all scientific fields. From modeling future predictions of global sea-level rise to heat flow through a rod, numerical solution to PDEs at the heart of modeling physical phenomena. The finite difference method, which approximates derivatives using the Taylor expansion, is a common starting point for numerical solutions to PDEs. By using the Taylor expansion ordinary differential equations or PDEs can be reduced to a series of algebraic statements for which matrix methods can be used to solve efficiently.  
 
-While the finite difference methods is powerful staring point it has it's limitations, one of which is dealing with discontinues. Due to failure of the finite difference method and other numerical methods to deal with discontinuities, the finite volume method arises. The finite volume method is commonly used to solve hyperbolic partial differential equations, due to their susceptibility to developing shock waves, but can be used to solve all types of PDEs. At the heart of the finite volume method is the \textit{Riemann Problem}, an initial value problem with piecewise constant initial conditions which naturally arises due the discretized domain which the equations are solved on. 
+While the finite difference methods are a powerful starting point they have their limitations; one of which is dealing with discontinues. Due to the failure of the finite difference method and other numerical methods to deal with discontinuities, the finite volume method arises. The finite volume method is commonly used to solve hyperbolic PDEs, due to their susceptibility to developing shock waves, but can be used to solve all type of PDE. At the heart of the finite volume method is the \textit{Riemann Problem}, an initial value problem with piecewise constant initial conditions that naturally arises due to the discretized domain on which the equations are solved. 
 
-We begin with a introduction to the finite volume method as motivated by the one dimensional advection equation. We then derive first and second order finite volume approximations, and discuss higher order methods in the context of \texttt{ClawPack}. In order to test these numerical methods we investigate the one dimensional elastic wave equation. First, we derive an analytical solutions for the homogeneous (\textit{i.e.} constant coefficient) equation that we use to validate our numerical methods. We then use the validated numerical methods to investigate the heterogeneous form of the elastic wave equation. This report concludes with conclusions drawn from the numerical experiments and outlines the next steps in order to use the finite volume method to investigate a real scientific question. 
+We begin with an introduction to conservation laws and the finite volume method as motivated by the one-dimensional advection equation. We derive conservation laws based on physical intuition of fluid flow as guided by  \cite{leveque_2002}. We then use the conservative form of the advection equation to derive the finite volume method. First and second-order numerical flux approximation methods are stated. We also investigate higher-order slope-limiters through the 
+\texttt{PyClaw} package. We then derive an analytical solution to the homogeneous (\textit{i.e.} constant-coefficient) elastic wave equation through the method of characteristics that we use to validate our numerical methods. Numerical experiments are conducted to investigate the performance of the numerical methods outlined. The code for the numerical experiments animations of the model runs can be found \href{https://github.com/andrewdnolan/MATH-709-Final-Project}{here}. We conclude this report with a discussion significance of the work below and some discussion of the avenues for future work. 
 
-%motivation for higher order slope limiters is that incroporate information about higher order deriavtes so less spurious oscialltions at steep gradients, i.e. schock waves 
+
+
+%motivation for higher-order slope limiters is that incroporate information about higher-order deriavtes so less spurious oscialltions at steep gradients, i.e. schock waves 
 
 
 \section{Conservation Laws}
-We being by deriving conservation laws based on based on physical intuition of fluid flow. We consider a fluid flow such as dye tracer in a river or a supraglacial stream with a positive advection speed ($\bar a$), that is the fluid is flowing from left to right. Our derivation closely follows that of \cite{comp_seis} who in turn closely follow \cite{leveque_2002}. The total mass of the quantity in question (i.e. concentration of the tracer) in a given unit volume (in the one dimensional case just length) is 
+We being by deriving conservation laws based on based on physical intuition of fluid flow. We consider a fluid flow such as dye tracer in a river or a supraglacial stream with a positive advection speed ($\bar a$), that is the fluid is flowing from left to right. Our derivation closely follows that of \cite{comp_seis} who in turn closely follow \cite{leveque_2002}. The total mass of the quantity in question (i.e. concentration of the tracer) in a given unit volume (in the one-dimensional case just length) is 
 \begin{equation}
     \int_{x_l}^{x_r} q(x,t) \: dx
 \end{equation}
@@ -152,7 +155,7 @@ for a heterogeneous material. In the case of the homogeneous material the advect
 
 \section{Finite Volume}
 
-We now derive the finite volume method for one dimensional conservation laws on a numerical grid where the $i$-th grid cell, $\mathcal{C}_i$ has cell interfaces $x_{i-1/2}, x_{i+1/2}$. We can approximate the value of the solution field $q(x,t)$ by the average quantity $Q_i^n$ within a given grid cell as 
+We now derive the finite volume method for one-dimensional conservation laws on a numerical grid where the $i$-th grid cell, $\mathcal{C}_i$ has cell interfaces $x_{i-1/2}, x_{i+1/2}$. We can approximate the value of the solution field $q(x,t)$ by the average quantity $Q_i^n$ within a given grid cell as 
 \begin{equation}
     Q_i^n  = \frac{1}{dx} \int_{\mathcal{C}_i} q(x,t)\: dx \approx \frac{1}{\Delta x} \int_{\mathcal{C}_i} q(x,t) \: dx
 \end{equation}
@@ -187,7 +190,7 @@ This formulation of the numerical flux produces a numerical method of the form
 \end{equation}
 How we choose to calculate the numerical flux $\mathcal{F}$ determines the order of accuracy of finite volume method \cite{leveque_2002}. 
 
-For example we have the centered, second order Lax-Wendroff method
+For example we have the centered, second-order Lax-Wendroff method
 \begin{equation}
       Q_i^{n+1} = Q_i^{n} - \frac{a \Delta t}{2 \Delta x} \left[\Delta Q_{i+1} - \Delta Q_{i-1} \right] + \frac{1}{2} \left( \frac{ a\Delta t}{\Delta x}\right)^2 \left(Q_{i+1}^n - 2Q_i^n + Q^n_{i-1}\right)
 \end{equation}  
@@ -199,10 +202,10 @@ which is equivalent to the Lax-Wendroff method for the finite difference method 
 \end{gathered}
 \end{equation}
 The statement of upwind method will follow below after we have derived analytical solution to the homogeneous equation, which makes the Riemann problem more evident. 
-%\subsubsection{Higher Order Approximations}
+%\subsubsection{higher-order Approximations}
 
 \section{Homogeneous Elastic Wave Equation}
-In order to test our derived numerical methods we investigate the one dimensional elastic wave equation propagating through a homogeneous medium. The source free form of the elastic wave equation can be written as a coupled system of equations
+In order to test our derived numerical methods we investigate the one-dimensional elastic wave equation propagating through a homogeneous medium. The source free form of the elastic wave equation can be written as a coupled system of equations
 \begin{equation}
 \begin{gathered}
     \frac{\partial}{\partial t}\sigma - \mu \frac{\partial}{\partial x} v = 0 \label{eq:elastic}\\
@@ -218,7 +221,7 @@ where
 \begin{align*}
     Q = \begin{bmatrix} \sigma \\ v\end{bmatrix}, \:\:\:  A = \begin{bmatrix} 0 & -\mu\\ -1/\rho & 0\end{bmatrix}.
 \end{align*}
-Equation \ref{eq:homoelasticvector} resembles the one dimensional advection equation (Eqaution \ref{eq:homoadvection}) except we have a coupled system of $m=2$ equations. In order to make use of the numerical methods outlined above we need to decouple the system of equations. In order to do so we find the eigendecomposition of $A$ such that
+Equation \ref{eq:homoelasticvector} resembles the one-dimensional advection equation (Eqaution \ref{eq:homoadvection}) except we have a coupled system of $m=2$ equations. In order to make use of the numerical methods outlined above we need to decouple the system of equations. In order to do so we find the eigendecomposition of $A$ such that
 \begin{equation}
     A = X\Lambda X^{-1}
 \end{equation}
@@ -306,10 +309,10 @@ given the scalar constant \cite{comp_seis}. Therefore we can plug our numerical 
 \begin{equation}
     Q^{n+1}_i = Q^n_i - \frac{\Delta t}{\Delta x} (A^{-} \Delta Q_l + A^{+} \Delta Q_r) 
 \end{equation}
-which is the first order upwind method \cite{comp_seis,leveque_2002}. We know have two numerical methods, the first order Upwind method and the second order Lax-Wedfford method. We will now test these methods against our analytical solution for the one dimensional elastic wave equation. We will additionally use the \texttt{ClawPack} software package for higher order numerical flux approximations \cite{clawpack}. 
+which is the first-order upwind method \cite{comp_seis,leveque_2002}. We know have two numerical methods, the first-order Upwind method and the second-order Lax-Wedfford method. We will now test these methods against our analytical solution for the one-dimensional elastic wave equation. We will additionally use the \texttt{ClawPack} software package for higher-order numerical flux approximations \cite{clawpack}. 
 
 \section{Numerical Experiments}
-Numerical experiments using the finite volume method were conducted with the one dimensional elastic wave equation. Input parameters were chosen to resemble realistic Earth system values (Table 1) \cite{comp_seis}. An initial condition of 
+Numerical experiments using the finite volume method were conducted with the one-dimensional elastic wave equation. Input parameters were chosen to resemble realistic Earth system values (Table 1) \cite{comp_seis}. An initial condition of 
 \begin{equation}
     Q(x,0) = e^{-\beta (x-x_0)^2} \cos (\gamma (x-x_0))
 \end{equation}
@@ -318,7 +321,7 @@ centered at \SI{4000}{m} is used  given its resemblance to a Gaussian function. 
     Q_{0}^n = Q_{-2}^n \:\:,\:\: Q_{-1}^n = Q_{1}^n 
     \label{eq:initalcondition}
 \end{equation}
-having adopted a pythonic indexing method, where $-2$ represents the second to last element in the solution vector. Periodic boundary conditions were chosen to allow the model to run for a relatively long time without having to discretize an absurdly large model domain. Therefore, we can relatively quickly and computationally efficiently observe the errors the each of the respective method produces. 
+having adopted a pythonic indexing method, where $-2$ represents the second to last element in the solution vector. Periodic boundary conditions were chosen to allow the model to run for a relatively long time without having to discretize an absurdly large model domain. Therefore, we can relatively quickly and computationally efficiently observe the errors each of the respective method produces. 
 \begin{table}[h]
     \centering
     \begin{tabular}{c l c c}
@@ -341,27 +344,27 @@ having adopted a pythonic indexing method, where $-2$ represents the second to l
     \caption{Material properties and model parameters used for in diagnostic numerical experiments. }
     \label{tab:my_label}
 \end{table}
-All time integration's observed the  CFL condition to ensure numerical stability (given that our numerical methods themselves are stable, \cite{leveque_2002}). Given that our problem is hyperbolic the CFL condition can be defined as 
+All time integration's observed the  CFL condition to ensure numerical stability (given that our numerical methods themselves are stable, \cite{leveque_2002}).  Since our problem is hyperbolic the CFL condition can be defined as 
 \begin{equation}
     s = \frac{\Delta t}{\Delta x} \max_p |\lambda_p| < 1
 \end{equation}
 where $\lambda_p$ is our maximum eigenvalue, since our eigenvalue are the speed at which our waves are advected \cite{leveque_2002}. We selected a Courant number ($s$) of 0.5 and with our chosen spatial domain parameters we solve for our time integration step $\Delta t$.
 
-Results after one second of time integration is shown in Figure \ref{fig:homo1sec}. The \texttt{PyClaw} package was used to investigate higher order slope limiters \cite{clawpack}. In the case of the simulations in Figure \ref{fig:homo1sec} a Supberbee slope limiter was used. After only one second  of time integration we can already observe a significant amount of error from the Upwind method. The error in the first order method appears to be concentrated at steep gradients in the solution vectors, which intuitively makes sense since the first order methods does not contain any information about higher order derivatives which is crucial to approximations at steep gradients. The errors in the first order method resemble artificial diffusion, where the amplitude of the wave being advected is decreasing artificially. 
+Results after one second of time integration are shown in Figure \ref{fig:homo1sec}. The \texttt{PyClaw} package was used to investigate higher-order slope limiters \cite{clawpack}. In the case of the simulations in Figure \ref{fig:homo1sec} a Supberbee slope limiter was used. After one second of time integration we can already observe a significant amount of error from the Upwind method. The error in the first-order method appears to be concentrated at steep gradients in the solution vectors, which intuitively makes sense since the first-order methods do not contain any information about higher-order derivatives which is crucial to approximations at steep gradients. The errors in the first-order method resemble artificial diffusion, where the amplitude of the wave being advected is decreasing artificially. 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figs/four_methods.eps}
-    \caption{One dimensional homogeneous elastic wave equation solutions for our three numerical methods plotted against that analytical solution. The PyClaw solution used a Superbee slope limiter. Results are plotted after $\approx$ 1 second of time integration.}
+    \caption{one-dimensional homogeneous elastic wave equation solutions for our three numerical methods plotted against that analytical solution. The PyClaw solution used a Superbee slope limiter. Results are plotted after $\approx$ 1 second of time integration.}
     \label{fig:homo1sec}
 \end{figure}
 
-While one second of time integration made the error in the Upwind method apparent, there seemed to be little variability in the Lax-Wefford and Superbee (\texttt{PyClaw}) methods as compared to the analytical solution. To investigate the error in these higher order methods more, we run the model for 20 seconds of time integration. The code used to run these numerical experiment, along with the figures produced are hosted online as a \href{https://github.com/andrewdnolan/MATH-709-Final-Project}{Github repository}. The repository includes render HTML animations of model run within a Jupyter notebooks. Solution vectors at 5, 10, 15, and 20 seconds from the 20 second time integration are plotted in Figure \ref{fig:longrun}. The artificial diffusion from Figure \ref{fig:homo1sec} is even more apparent by five seconds, while there is still strong agreement between the Lax-Wefford and Superbee methods. Note the analytical solution is not plotted in Figure \ref{fig:longrun}, given that I was unable to implement the periodic boundary conditions for the analytical solution. Therefore, we are using the \texttt{PyClaw} solution as our reference which we compare the Upwind and Lax-Wefford solutions against. Note the velocity solution after 10 seconds of time integration in Figure \ref{fig:longrun}. The amplitude of Lax-Wefford scheme is much larger than the than either the Upwind or Superbee solution. There appears to large error when the two waves travelling in opposite directions meet as observed in the velocity solutions at $t=10$ and $t=20$. While the error appears to be large when two waves meet, there does not appear to be much disagrement between the Lax-Wefford and \texttt{PyClaw} solutions after the waves are advected and no longer interfering, as observed in the velocity solution at $t=15$ (Figure \ref{fig:longrun}).  It appears as through the Law-Wefford method does a sufficent job when compared to the Superbee method in the case of the initial condition used here. 
+While one second of time integration made the error in the Upwind method apparent, there seemed to be little variability in the Lax-Wefford and Superbee (\texttt{PyClaw}) methods as compared to the analytical solution. To investigate the error in these higher-order methods more, we run the model for 20 seconds of time integration. The code used to run these numerical experiments, along with the figures produced are hosted online as a \href{https://github.com/andrewdnolan/MATH-709-Final-Project}{Github repository}. The repository includes HTML animations of the model run within a Jupyter notebook. Solution vectors at 5, 10, 15, and 20 seconds from the 20 second time integration are plotted in Figure \ref{fig:longrun}. The artificial diffusion from Figure \ref{fig:homo1sec} is even more apparent by five seconds, while there is still strong agreement between the Lax-Wefford and Superbee methods. Note the analytical solution is not plotted in Figure \ref{fig:longrun}, given that I was unable to implement the periodic boundary conditions for the analytical solution. Therefore, we are using the \texttt{PyClaw} solution as our reference which we compare the Upwind and Lax-Wefford solutions against. Note the velocity solution after 10 seconds of time integration in Figure \ref{fig:longrun}. The amplitude of Lax-Wefford scheme is much larger than the than either the Upwind or Superbee solution. There appears to large error when the two waves traveling in opposite directions meet as observed in the velocity solutions at $t=10$ and $t=20$. While the error appears to be large when two waves meet, there does not appear to be much disagreement between the Lax-Wefford and \texttt{PyClaw} solutions after the waves are advected and no longer interfering, as observed in the velocity solution at $t=15$ (Figure \ref{fig:longrun}).  It appears as though the Law-Wefford method does a sufficient job when compared to the Superbee method in the case of the initial condition used here.
 
 \section{Discussion and Conclusion}
 
-Numerical experiments using the one dimmensional elastic wave equation show demonstrate large errors in the Upwind method, while there is modest agreement between the Law-Wefford and Superbee methods, as implemented through \texttt{PyClaw}. While there appeared to qualitatively be agreement between the two methods, a method to quantity the error for each numerical method would have been useful. A method such as the Richardson extrapolation would be a well suited candidate for such quantification, but was outside the scope of this work. Additionally, the qualitative agreement between the two higher order methods, may be in part due to the initial condition, and therefore waveform being advected, used in this study. The initial condition as represented by Equation \ref{eq:initalcondition} is relative smooth and while there may be steep gradients at points, there are no discontinuities. Therefore, to really test the capabilities of the methods outlined above, one would want to use an end member waveform such as one with discontinuity. Another shortcoming of this study was the efficiency of the code used to run these experiments. Given the nature of the coupled equation and matrix multiplication, the equation were not simply vectorized and therefore solved via nested for loops. We also used explicit methods, as is common practice to hyperbolic systems \cite{leveque_2002}, and therefor could not make use of iterative solvers such as GMRES or the conjugate gradient method. An immediate step to take in the future will be implement the \texttt{PyClaw} package in parallel as is supported through PETSc.
+Numerical experiments using the elastic wave equation demonstrate large errors in the Upwind method, while there is a modest agreement between the Law-Wefford and Superbee methods, as implemented through \texttt{PyClaw}. While qualitatively there appeared to be agreement between the two methods, a method to quantify the error for each numerical method would have been useful. A method such as the Richardson extrapolation would be a well-suited candidate for such quantification, but was outside the scope of this work. Additionally, the qualitative agreement between the two higher-order methods may be in part due to the initial condition, and therefore waveform being advected, used in this study. The initial condition as represented by Equation \ref{eq:initalcondition} is relative smooth and while there may be steep gradients at points, there are no discontinuities. Therefore, to more robustly test the capabilities of the methods outlined above, one would want to use an end member waveform such as one with discontinuity. Another shortcoming of this study was the efficiency of the code used to run these experiments. Given the nature of the coupled equation and matrix multiplication, the equation was not simply vectorized and therefore solved via nested for loops. We also used explicit methods, as is common practice to hyperbolic systems \cite{leveque_2002}, and therefore could not make use of iterative solvers such as GMRES or the conjugate gradient method. An immediate step to take in the future will be implementing the \texttt{PyClaw} package in parallel as is supported through PETSc.
 
-While the code may not have as efficient as possible and no robust error quantification was done, the work non the less was fruitful. Based on physical intuition and guided by \cite{leveque_2002} we derived conservation laws from which we can explicitly state the advection equation. We then derived the framework of the finite volume method, based on numerical approximations of fluxes into and out of our control volume. The sound physical framework on which conservation laws and finite volume method are derived from has left us with an appreciation for the numerical method. Next, we derived an analytical solution to the one dimensional elastic wave equation through the method of characteristics. This derivation of an analytical solution demonstrated the significance of the eigendecomposition to physical problems. Having seen material properties such as the shear velocity $C$ and the seismic impedance $Z$ stated in previous courses it was illuminating to see how these material properties are actually derived. Our derivation of the analytical solution and the decomposition of $A$ also informed our discussion of the Riemann problem. Finally we conducted the numerical experiment using the first and second order finite volume methods stated above, and also successfully implemented higher ordeer solutions in \texttt{PyClaw} package. The work done here represent a formal introduction to the finite volume method and the \texttt{PyClaw} package from which these methods could be used for genuine scientific inquiry. 
+While the code may not have as efficient as possible and no robust error quantification was done, the work none the less was fruitful. Based on physical intuition and guided by \cite{leveque_2002} we derived conservation laws from which we can formulate the advection equation (Equation \ref{eq:homoadvection}). We then derived the framework of the finite volume method based on numerical approximations of fluxes into and out of our control volume. The sound physical framework on which conservation laws and finite volume methods are derived from has left us with an appreciation for the numerical method. Next, we derived an analytical solution to the one-dimensional elastic wave equation through the method of characteristics. This derivation of an analytical solution demonstrated the significance of the eigendecomposition to physical problems. Having seen material properties such as the shear velocity $C$ and the seismic impedance $Z$ stated in previous courses it was illuminating to see how these material properties are derived. Our derivation of the analytical solution and the decomposition of $A$ also informed our discussion of the Riemann problem. Finally, we conducted the numerical experiment using the first and second-order finite volume methods stated above, and also successfully implemented higher-order solutions through the \texttt{PyClaw} package. The work done here represents a formal introduction to the finite volume method and the \texttt{PyClaw} package from which these methods could be used for genuine scientific inquiry. 
 
 \begin{figure}
     \centering
