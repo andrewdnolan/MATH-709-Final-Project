@@ -9,5 +9,5 @@ __Numerical experiments using finite volume solvers to investigate the 1-D Elast
 
 File of interest:
 
-  - [Numerical experiments](https://github.com/andrewdnolan/MATH-709-Final-Project/blob/master/notebooks/homogenous_1D_elastic.ipynb) hosted within a Jupyter notebook  
-  - [Final Report]() using the SIAM Journal Template
+  - [Numerical experiments](https://nbviewer.jupyter.org/github/andrewdnolan/MATH-709-Final-Project/blob/master/numerical_experiments/homogenous_1D_elastic.ipynb) hosted in a Jupyter notebook  
+  - [Final Report](https://github.com/andrewdnolan/MATH-709-Final-Project/blob/master/report/MATH_709_Project_2.pdf) using the SIAM Journal Template

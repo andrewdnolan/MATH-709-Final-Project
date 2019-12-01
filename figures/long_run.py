@@ -3,7 +3,7 @@
 import numpy as np
 from scipy import linalg as LA
 import matplotlib.pyplot as plt
-from matplotlib import animation, rc
+plt.rcParams['text.usetex'] = True
 
 # Material Properties
 # -----------------------------------------------------
@@ -124,3 +124,109 @@ claw.solution.state.problem_data = {                 # Material properties
                               'cc'  : C
                               }
 status = claw.run()
+
+
+# Plotting Figure
+# -----------------------------------------------------
+fig, ax = plt.subplots(4,2,sharex=True,sharey='col',figsize=(6,7))
+
+#ax[0].set_ylabel("Stress")
+#ax[1].set_ylabel("Velocity",labelpad = 11, rotation=270)
+ax[0,1].yaxis.tick_right()
+ax[1,1].yaxis.tick_right()
+ax[2,1].yaxis.tick_right()
+ax[3,1].yaxis.tick_right()
+#ax[1].yaxis.set_label_position("right")
+
+
+ax[0,0].set_ylim(-0.8, 1.2)
+
+ax[0,1].set_ylim(-0.9e-7, 1.2e-7)
+
+# t = 5
+# -----------------------------------------------------
+ax[0,0].plot(x, Q_up[0,:,2000],c = '#BF5E58')
+ax[0,1].plot(x, Q_up[1,:,2000],c = '#BF5E58', label='Upwind')
+
+ax[0,0].plot(x, Q_lwf[0,:,2000],c = '#707BA7',ls='--')
+ax[0,1].plot(x, Q_lwf[1,:,2000],c = '#707BA7',ls='--',label='Law-Wefford')
+
+ax[0,0].plot(x, claw.frames[2000].q[0,:],c = '#278F69',ls=':')
+ax[0,1].plot(x, claw.frames[2000].q[1,:],c = '#278F69',ls=':',label='PyClaw')
+
+ax[0,0].text(0.05, 0.85,'t=5',size=10,transform=ax[0,0].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+ax[0,1].text(0.05, 0.85,'t=5',size=10,transform=ax[0,1].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+
+# t = 10
+# -----------------------------------------------------
+
+ax[1,0].plot(x, Q_up[0,:,4000],c = '#BF5E58')
+ax[1,1].plot(x, Q_up[1,:,4000],c = '#BF5E58', label='Upwind')
+
+ax[1,0].plot(x, Q_lwf[0,:,4000],c = '#707BA7',ls='--')
+ax[1,1].plot(x, Q_lwf[1,:,4000],c = '#707BA7',ls='--',label='Law-Wefford')
+
+ax[1,0].plot(x, claw.frames[4000].q[0,:],c = '#278F69',ls=':')
+ax[1,1].plot(x, claw.frames[4000].q[1,:],c = '#278F69',ls=':',label='PyClaw')
+
+ax[1,0].text(0.05, 0.85,'t=10',size=10,transform=ax[1,0].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+ax[1,1].text(0.05, 0.85,'t=10',size=10,transform=ax[1,1].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+
+# t = 15
+# -----------------------------------------------------
+
+ax[2,0].plot(x, Q_up[0,:,5991],c = '#BF5E58')
+ax[2,1].plot(x, Q_up[1,:,5991],c = '#BF5E58', label='Upwind')
+
+ax[2,0].plot(x, Q_lwf[0,:,5991],c = '#707BA7',ls='--')
+ax[2,1].plot(x, Q_lwf[1,:,5991],c = '#707BA7',ls='--',label='Law-Wefford')
+
+ax[2,0].plot(x, claw.frames[5991].q[0,:],c = '#278F69',ls=':')
+ax[2,1].plot(x, claw.frames[5991].q[1,:],c = '#278F69',ls=':',label='PyClaw')
+
+ax[2,0].text(0.05, 0.85,'t=15',size=10,transform=ax[2,0].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+ax[2,1].text(0.05, 0.85,'t=15',size=10,transform=ax[2,1].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+
+
+# t = 20
+# -----------------------------------------------------
+
+ax[3,0].plot(x, Q_up[0,:,7989],c = '#BF5E58')
+ax[3,1].plot(x, Q_up[1,:,7989],c = '#BF5E58', label='Upwind')
+
+ax[3,0].plot(x, Q_lwf[0,:,7989],c = '#707BA7',ls='--')
+ax[3,1].plot(x, Q_lwf[1,:,7989],c = '#707BA7',ls='--',label='Law-Wefford')
+
+ax[3,0].plot(x, claw.frames[7989].q[0,:],c = '#278F69',ls=':')
+ax[3,1].plot(x, claw.frames[7989].q[1,:],c = '#278F69',ls=':',label='PyClaw')
+
+ax[3,0].text(0.05, 0.85,'t=20',size=10,transform=ax[3,0].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+ax[3,1].text(0.05, 0.85,'t=20',size=10,transform=ax[3,1].transAxes,
+                    bbox=dict(facecolor='white', alpha=0, edgecolor = 'none'))
+
+
+ax[0,1].get_yaxis().get_offset_text().set_x(1.2)
+ax[1,1].get_yaxis().get_offset_text().set_x(1.2)
+ax[2,1].get_yaxis().get_offset_text().set_x(1.2)
+ax[3,1].get_yaxis().get_offset_text().set_x(1.2)
+
+
+ax[3,0].set_xlabel("km")
+ax[3,1].set_xlabel("km")
+
+ax[0,0].set_title('Stress ($\sigma$)')
+ax[0,1].set_title('Velocity ($v$)')
+
+ax[1,1].legend()
+
+plt.tight_layout()
+plt.subplots_adjust(hspace=0,wspace=0.05)
+
+plt.savefig('./longrun.eps')

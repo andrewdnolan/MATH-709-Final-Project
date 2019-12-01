@@ -3,7 +3,7 @@
 import numpy as np
 from scipy import linalg as LA
 import matplotlib.pyplot as plt
-from matplotlib import animation, rc
+plt.rcParams['text.usetex'] = True
 
 # Material Properties
 # -----------------------------------------------------
@@ -17,7 +17,7 @@ mu  = rho*C**2          # bluk modulus
 nx  = 800               # number of grid cells
 L   = 10*1000           # domain length (m)
 cfl = 0.5               # Counrant Number
-T   = 15                # length of simulation (s)
+T   = 2                 # length of simulation (s)
 
 # Inital Conditions
 # -----------------------------------------------------
@@ -124,3 +124,39 @@ claw.solution.state.problem_data = {                 # Material properties
                               'cc'  : C
                               }
 status = claw.run()
+
+# Plotting Figure
+# -----------------------------------------------------
+fig, ax = plt.subplots(2,1,sharex=True)
+
+ax[0].set_ylabel("Stress")
+ax[1].set_ylabel("Velocity",labelpad = 11, rotation=270)
+ax[1].yaxis.tick_right()
+ax[1].yaxis.set_label_position("right")
+ax[1].get_yaxis().get_offset_text().set_x(1.1)
+
+ax[1].set_xlabel("km")
+ax[0].set_title('T = {:.3f}'.format(400*dt))
+#BF5E58,#707BA7,#278F69,#A6782D
+
+
+ax[0].plot(x, Q_a[0,:,400],c = 'k')
+ax[1].plot(x, Q_a[1,:,400],c = 'k',label='Anlytical')
+
+ax[0].plot(x, Q_up[0,:,400],c = '#BF5E58')
+ax[1].plot(x, Q_up[1,:,400],c = '#BF5E58', label='Upwind')
+
+ax[0].plot(x, Q_lwf[0,:,400],c = '#707BA7',ls='--')
+ax[1].plot(x, Q_lwf[1,:,400],c = '#707BA7',ls='--',label='Law-Wefford')
+
+
+ax[0].plot(x, claw.frames[400].q[0,:],c = '#278F69',ls=':')
+ax[1].plot(x, claw.frames[400].q[1,:],c = '#278F69',ls=':',label='PyClaw')
+
+
+
+ax[1].legend(ncol=2)
+
+plt.tight_layout()
+plt.subplots_adjust(hspace=0)
+plt.savefig('./four_methods.eps')
