@@ -1,5 +1,5 @@
-# MATH 709: Finite Volume Solvers
-__Numerical experiments using finite volume solvers to investigate the 1-D Elastic Wave Equations__
+# MATH 709: Finite Volume Solvers  
+__Numerical experiments using finite volume solvers to investigate the 1-D Elastic Wave Equations__  
 <!--
  <img src="https://latex.codecogs.com/svg.latex?\frac{\partial}{\partial&space;t}\sigma&space;-&space;\mu&space;\frac{\partial}{\partial&space;x}&space;v&space;=&space;0&space;" align="middle">
 

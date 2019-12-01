@@ -1,9 +1,24 @@
-# PyClaw Files 
+#     PyClaw Files     
+#-----------------------
 *.log
 None0000000.png
 
-# Jupyter Notebook
+#   Jupyter Notebook
+#-----------------------
 .ipynb_checkpoints
 
-# Apple Crap
+#     Apple Crap
+#-----------------------
 .DS_Store
+
+# Latex Compiled files
+#-----------------------
+*.log
+*.lot
+*.out
+*.lof
+*.aux
+*.gz
+*.toc
+*.bbl
+*.blg
