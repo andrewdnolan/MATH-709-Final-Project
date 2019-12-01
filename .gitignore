@@ -5,3 +5,5 @@ None0000000.png
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Apple Crap
+.DS_Store

@@ -7,16 +7,7 @@ __Numerical experiments using finite volume solvers to investigate the 1-D Elast
 -->
 
 
-Repository Structure:
+File of interest:
 
   - [Numerical experiments](https://github.com/andrewdnolan/MATH-709-Final-Project/blob/master/notebooks/homogenous_1D_elastic.ipynb) hosted within a Jupyter notebook  
   - [Final Report]() using the SIAM Journal Template
-```
-├── notebooks  
-│   ├── homogenous_1D_elastic.ipynb
-│   └── non_homogenous_1D_elastic.ipynb  
-├── pyfiles  
-│   ├── heterogenous.py  
-│   └── homogenous.py  
-└── report  
-```
